@@ -77,7 +77,7 @@ parser.add_argument('--dynamic-graph', action='store_true', default=False,
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 args.factor = not args.no_factor
-print(args.cuda)
+print(args)
 
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)

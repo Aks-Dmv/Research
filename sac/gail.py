@@ -172,7 +172,7 @@ class AdvSMM:
         selected_indices = np.random.choice(self.target_state_buffer.shape[0], size=batch_size)
         batch = self.target_state_buffer[selected_indices]
         edges_for_batch = self.target_edges_buffer[selected_indices]
-        return torch.FloatTensor(batch).to(self.device), torch.FloatTensor(edges_for_batch).to(self.device)
+        return batch.to(self.device), edges_for_batch.to(self.device)
 
 
 
@@ -189,7 +189,7 @@ class AdvSMM:
             sampled_batch['obs2'].reshape((-1, 1, self.num_atoms, self.inp_dims))], dim=-1)
 
         orig_edges = sampled_batch['act'].reshape((-1, self.num_atoms*(self.num_atoms-1), self.num_edges))
-        orig_edges = torch.FloatTensor(orig_edges).to(self.device)
+        orig_edges = orig_edges.to(self.device)
         
         expert_disc_input, expert_disc_edges = self.get_target_batch_and_edges(self.disc_optim_batch_size)
         expert_disc_input = expert_disc_input.reshape((-1, 1, self.num_atoms, 2*self.inp_dims)) # access to expert samples
@@ -197,8 +197,8 @@ class AdvSMM:
         edges = torch.cat([orig_edges, expert_disc_edges], dim=0)
         
 
-        policy_disc_input = np.transpose(policy_disc_input, (0, 2, 1, 3))
-        expert_disc_input = np.transpose(expert_disc_input, (0, 2, 1, 3))
+        policy_disc_input = policy_disc_input.transpose(1, 2)
+        expert_disc_input = expert_disc_input.transpose(1, 2)
 
         disc_input = torch.cat([expert_disc_input, policy_disc_input], dim=0) # (2*B, 2*S)
 
@@ -241,8 +241,8 @@ class AdvSMM:
         obs2= policy_batch['obs2'].reshape((-1, 1, self.num_atoms, self.inp_dims))
         edges = policy_batch['act'].reshape((-1, self.num_atoms*(self.num_atoms-1), self.num_edges))
 
-        obs = np.transpose(obs, (0, 2, 1, 3))
-        obs2 = np.transpose(obs2, (0, 2, 1, 3))
+        obs = obs.transpose(1, 2)
+        obs2 = obs2.transpose(1, 2)
 
         policy_batch['rew'] = self.get_reward(obs, obs2, edges, rel_rec, rel_send, prediction_steps)
 
