@@ -307,6 +307,10 @@ class SAC:
         return self.ac.act_batch(data, edges, rel_rec, rel_send, prediction_steps, deterministic, get_logprob=get_logprob)
         # return self.ac.act_batch(torch.as_tensor(o[:, :self.true_state_dim], dtype=torch.float32).to(self.device), deterministic)
 
+    def init_cuda(self):
+        self.ac.q1.cuda()
+        self.ac.q2.cuda()
+        self.ac.pi.cuda()
 
     def reset(self):
         pass

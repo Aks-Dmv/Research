@@ -175,7 +175,7 @@ if args.prior:
 
 if args.cuda:
     encoder.cuda()
-    decoder.cuda()
+    decoder.init_cuda()
     rel_rec = rel_rec.cuda()
     rel_send = rel_send.cuda()
     triu_indices = triu_indices.cuda()
