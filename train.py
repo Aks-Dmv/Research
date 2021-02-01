@@ -203,10 +203,6 @@ algorithm = AdvSMM(
 
 def train(epoch, best_val_loss):
     t = time.time()
-    nll_train = []
-    acc_train = []
-    kl_train = []
-    mse_train = []
 
     encoder.train()
     decoder.ac.train()
@@ -226,42 +222,8 @@ def train(epoch, best_val_loss):
         algorithm.update_target_batch(data)
         algorithm.update_target_edges(edges, data.shape[2]-1)
         algorithm.train(data, edges, rel_rec, rel_send, args.prediction_steps, batch_idx)
-        print("done")
-        return 0
+        print("done training with ", batch_idx)
 
-        # if args.decoder == 'rnn':
-        #     output = decoder(data, edges, rel_rec, rel_send, 100,
-        #                      burn_in=True,
-        #                      burn_in_steps=args.timesteps - args.prediction_steps)
-        # else:
-        #     output = decoder.get_action_batch(data, edges, rel_rec, rel_send, args.prediction_steps)
-
-        # output = np.transpose(output, (0, 2, 1, 3)).reshape((-1, args.num_atoms*args.dims))
-        # print(output.shape[0])
-
-        # print(data.shape, output.shape, args.prediction_steps)
-        # print([args.dims])
-        # target = data[:, :, 1:, :]
-
-        # loss_nll = nll_gaussian(output, target, args.var)
-
-        # if args.prior:
-        #     loss_kl = kl_categorical(prob, log_prior, args.num_atoms)
-        # else:
-        #     loss_kl = kl_categorical_uniform(prob, args.num_atoms,
-        #                                      args.edge_types)
-
-        # loss = loss_nll + loss_kl
-
-        # acc = edge_accuracy(logits, relations)
-        # acc_train.append(acc)
-
-        # loss.backward()
-        # optimizer.step()
-
-        # mse_train.append(F.mse_loss(output, target).data.item())
-        # nll_train.append(loss_nll.data.item())
-        # kl_train.append(loss_kl.data.item())
 
     nll_val = []
     acc_val = []
@@ -295,10 +257,6 @@ def train(epoch, best_val_loss):
         kl_val.append(loss_kl.data.item())
 
     print('Epoch: {:04d}'.format(epoch),
-          'nll_train: {:.10f}'.format(np.mean(nll_train)),
-          'kl_train: {:.10f}'.format(np.mean(kl_train)),
-          'mse_train: {:.10f}'.format(np.mean(mse_train)),
-          'acc_train: {:.10f}'.format(np.mean(acc_train)),
           'nll_val: {:.10f}'.format(np.mean(nll_val)),
           'kl_val: {:.10f}'.format(np.mean(kl_val)),
           'mse_val: {:.10f}'.format(np.mean(mse_val)),
@@ -309,10 +267,6 @@ def train(epoch, best_val_loss):
         torch.save(decoder.state_dict(), decoder_file)
         print('Best model so far, saving...')
         print('Epoch: {:04d}'.format(epoch),
-              'nll_train: {:.10f}'.format(np.mean(nll_train)),
-              'kl_train: {:.10f}'.format(np.mean(kl_train)),
-              'mse_train: {:.10f}'.format(np.mean(mse_train)),
-              'acc_train: {:.10f}'.format(np.mean(acc_train)),
               'nll_val: {:.10f}'.format(np.mean(nll_val)),
               'kl_val: {:.10f}'.format(np.mean(kl_val)),
               'mse_val: {:.10f}'.format(np.mean(mse_val)),
