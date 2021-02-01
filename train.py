@@ -244,6 +244,7 @@ def train(epoch, best_val_loss):
 
         # validation output uses teacher forcing
         output = decoder.get_action_batch(data, edges, rel_rec, rel_send, 1)
+        output = torch.as_tensor(output).to(the_device)
 
         target = data[:, :, 1:, :]
         loss_nll = nll_gaussian(output, target, args.var)
@@ -285,7 +286,7 @@ def test():
     counter = 0
 
     encoder.eval()
-    decoder.eval()
+    # decoder.eval()
     encoder.load_state_dict(torch.load(encoder_file))
     decoder.load_state_dict(torch.load(decoder_file))
     for batch_idx, (data, relations) in enumerate(test_loader):
@@ -305,6 +306,7 @@ def test():
         prob = my_softmax(logits, -1)
 
         output = decoder.get_action_batch(data, edges, rel_rec, rel_send, 1)
+        output = torch.as_tensor(output).to(the_device)
 
         target = data_decoder[:, :, 1:, :]
         loss_nll = nll_gaussian(output, target, args.var)
@@ -333,6 +335,7 @@ def test():
             data_plot = data[:, :, args.timesteps:args.timesteps + 21,
                         :].contiguous()
             output = decoder.get_action_batch(data_plot, edges, rel_rec, rel_send, 20)
+            output = torch.as_tensor(output).to(the_device)
             target = data_plot[:, :, 1:, :]
 
         mse = ((target - output) ** 2).mean(dim=0).mean(dim=0).mean(dim=-1)
