@@ -378,7 +378,7 @@ def test():
         else:
             data_plot = data[:, :, args.timesteps:args.timesteps + 21,
                         :].contiguous()
-            output = decoder(data_plot, edges, rel_rec, rel_send, 20)
+            output = decoder.get_action_batch(data_plot, edges, rel_rec, rel_send, 20)
             target = data_plot[:, :, 1:, :]
 
         mse = ((target - output) ** 2).mean(dim=0).mean(dim=0).mean(dim=-1)
@@ -419,20 +419,16 @@ best_val_loss = np.inf
 best_epoch = 0
 for epoch in range(args.epochs):
     val_loss = train(epoch, best_val_loss)
+    if val_loss < best_val_loss:
+        best_val_loss = val_loss
+        best_epoch = epoch
+print("Optimization Finished!")
+print("Best Epoch: {:04d}".format(best_epoch))
+if args.save_folder:
+    print("Best Epoch: {:04d}".format(best_epoch), file=log)
+    log.flush()
 
-
-
-    break
-#     if val_loss < best_val_loss:
-#         best_val_loss = val_loss
-#         best_epoch = epoch
-# print("Optimization Finished!")
-# print("Best Epoch: {:04d}".format(best_epoch))
-# if args.save_folder:
-#     print("Best Epoch: {:04d}".format(best_epoch), file=log)
-#     log.flush()
-
-# test()
-# if log is not None:
-#     print(save_folder)
-#     log.close()
+test()
+if log is not None:
+    print(save_folder)
+    log.close()
