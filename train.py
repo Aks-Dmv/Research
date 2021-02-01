@@ -77,7 +77,7 @@ parser.add_argument('--dynamic-graph', action='store_true', default=False,
 args = parser.parse_args()
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 args.factor = not args.no_factor
-print(args)
+print(args.cuda)
 
 np.random.seed(args.seed)
 torch.manual_seed(args.seed)
@@ -173,20 +173,23 @@ if args.prior:
     if args.cuda:
         log_prior = log_prior.cuda()
 
+rel_rec = Variable(rel_rec)
+rel_send = Variable(rel_send)
+
+the_device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+disc_model = MLPDisc(args.dims, [256,], args.num_atoms).to(the_device)
+
 if args.cuda:
     encoder.cuda()
     decoder.init_cuda()
+    disc_model.cuda()
     rel_rec = rel_rec.cuda()
     rel_send = rel_send.cuda()
     triu_indices = triu_indices.cuda()
     tril_indices = tril_indices.cuda()
 
-rel_rec = Variable(rel_rec)
-rel_send = Variable(rel_send)
 
-the_device = torch.device("cpu")
-
-disc_model = MLPDisc(args.dims, [256,], args.num_atoms).to(the_device)
 
 algorithm = AdvSMM(
     num_atoms=args.num_atoms,

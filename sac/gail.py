@@ -128,7 +128,7 @@ class AdvSMM:
         ob1 = output[:,:-1,:,:].reshape((-1, self.replay_obs_dim))
         ob2 = output[:,1:,:,:].reshape((-1, self.replay_obs_dim))
         
-        edges_np = edges.data.numpy().reshape((edges.shape[0],-1))
+        edges_np = edges.cpu().data.numpy().reshape((edges.shape[0],-1))
         edges_np = np.repeat(edges_np, numb_repeats, 0)
         
         self.replay_buffer.store_batch( ob1, edges_np, np.ones(ob1.shape[0]), ob2, np.zeros(ob1.shape[0]) )
