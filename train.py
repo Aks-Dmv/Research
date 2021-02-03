@@ -134,7 +134,7 @@ if args.decoder == 'mlp':
     #                      n_hid=args.decoder_hidden,
     #                      do_prob=args.decoder_dropout,
     #                      skip_first=args.skip_first)
-    decoder = SAC( args.dims, encoder , args.num_atoms)
+    decoder = SAC( args.dims, encoder , args.num_atoms, device=torch.device("cuda" if torch.cuda.is_available() else "cpu"))
 elif args.decoder == 'rnn':
     decoder = RNNDecoder(n_in_node=args.dims,
                          edge_types=args.edge_types,
