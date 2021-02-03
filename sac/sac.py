@@ -311,6 +311,17 @@ class SAC:
         self.ac.q1.cuda()
         self.ac.q2.cuda()
         self.ac.pi.cuda()
+        self.ac_targ.q1.cuda()
+        self.ac_targ.q2.cuda()
+        self.ac_targ.pi.cuda()
+
+    def init_eval(self):
+        self.ac.q1.eval()
+        self.ac.q2.eval()
+        self.ac.pi.eval()
+        self.ac_targ.q1.eval()
+        self.ac_targ.q2.eval()
+        self.ac_targ.pi.eval()
 
     def reset(self):
         pass

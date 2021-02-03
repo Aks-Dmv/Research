@@ -234,7 +234,7 @@ def train(epoch, best_val_loss):
     mse_val = []
 
     encoder.eval()
-    decoder.eval()
+    decoder.init_eval()
     for batch_idx, (data, relations) in enumerate(valid_loader):
         if args.cuda:
             data, relations = data.cuda(), relations.cuda()
