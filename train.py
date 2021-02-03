@@ -268,7 +268,14 @@ def train(epoch, best_val_loss):
           'time: {:.4f}s'.format(time.time() - t))
     if args.save_folder and np.mean(nll_val) < best_val_loss:
         torch.save(encoder.state_dict(), encoder_file)
-        torch.save(decoder.state_dict(), decoder_file)
+        torch.save({
+            'q1': decoder.ac.q1.state_dict(),
+            'q2': decoder.ac.q2.state_dict(),
+            'pi': decoder.ac.pi.state_dict(),
+            'target_q1': decoder.ac_targ.q1.state_dict(),
+            'target_q2': decoder.ac_targ.q2.state_dict(),
+            'target_pi': decoder.ac_targ.pi.state_dict(),
+            }, decoder_file)
         print('Best model so far, saving...')
         print('Epoch: {:04d}'.format(epoch),
               'nll_val: {:.10f}'.format(np.mean(nll_val)),
@@ -289,9 +296,15 @@ def test():
     counter = 0
 
     encoder.eval()
-    # decoder.eval()
+    decoder.init_eval()
     encoder.load_state_dict(torch.load(encoder_file))
-    decoder.load_state_dict(torch.load(decoder_file))
+    decoder_checkpoint = torch.load(decoder_file)
+    decoder.ac.q1.load_state_dict(decoder_checkpoint['q1'])
+    decoder.ac.q2.load_state_dict(decoder_checkpoint['q2'])
+    decoder.ac.pi.load_state_dict(decoder_checkpoint['pi'])
+    decoder.ac_targ.q1.load_state_dict(decoder_checkpoint['target_q1'])
+    decoder.ac_targ.q2.load_state_dict(decoder_checkpoint['target_q2'])
+    decoder.ac_targ.pi.load_state_dict(decoder_checkpoint['target_pi'])
     for batch_idx, (data, relations) in enumerate(test_loader):
         if args.cuda:
             data, relations = data.cuda(), relations.cuda()
