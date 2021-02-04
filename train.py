@@ -225,8 +225,6 @@ def train(epoch, best_val_loss):
         algorithm.update_target_batch(data)
         algorithm.update_target_edges(edges, data.shape[2]-1)
         algorithm.train(data, edges, rel_rec, rel_send, args.prediction_steps, batch_idx)
-        print("done training with ", batch_idx)
-
 
     nll_val = []
     acc_val = []
