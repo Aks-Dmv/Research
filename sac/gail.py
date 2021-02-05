@@ -155,6 +155,8 @@ class AdvSMM:
             disc_stat += self._do_reward_training(rel_rec, rel_send, prediction_steps, epoch)
         for _ in range(self.num_policy_updates_per_loop_iter):
             policy_stat += self._do_policy_training(rel_rec, rel_send, prediction_steps, epoch)
+        print("disc stat ", disc_stat)
+        print("policy stat ", policy_stat)
 
     def update_target_batch(self, new_target_batch):
         s1 = new_target_batch.transpose(1, 2).contiguous()
