@@ -225,6 +225,7 @@ def train(epoch, best_val_loss):
         algorithm.update_target_batch(data)
         algorithm.update_target_edges(edges, data.shape[2]-1)
         algorithm.train(data, edges, rel_rec, rel_send, args.prediction_steps, batch_idx)
+    print("training for ", epoch," is done")
 
     nll_val = []
     acc_val = []
@@ -257,7 +258,7 @@ def train(epoch, best_val_loss):
         mse_val.append(F.mse_loss(output, target).data.item())
         nll_val.append(loss_nll.data.item())
         kl_val.append(loss_kl.data.item())
-
+    print("validation loop done")
     print('Epoch: {:04d}'.format(epoch),
           'nll_val: {:.10f}'.format(np.mean(nll_val)),
           'kl_val: {:.10f}'.format(np.mean(kl_val)),
@@ -389,6 +390,7 @@ t_total = time.time()
 best_val_loss = np.inf
 best_epoch = 0
 for epoch in range(args.epochs):
+    print("starting outside iteration ", epoch)
     val_loss = train(epoch, best_val_loss)
     if val_loss < best_val_loss:
         best_val_loss = val_loss
