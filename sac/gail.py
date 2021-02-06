@@ -43,7 +43,7 @@ class AdvSMM:
         num_policy_updates_per_loop_iter=5,
         num_initial_disc_iters=2,#100,
 
-        disc_optim_batch_size=128,
+        disc_optim_batch_size=1024,#128,
         disc_lr=0.0003,
         disc_momentum=0.0,
         disc_optimizer_class=optim.Adam,
