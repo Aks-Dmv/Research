@@ -22,7 +22,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=500,
                     help='Number of epochs to train.')
-parser.add_argument('--batch-size', type=int, default=512,#128,
+parser.add_argument('--batch-size', type=int, default=256,#128,
                     help='Number of samples per batch.')
 parser.add_argument('--lr', type=float, default=0.0005,
                     help='Initial learning rate.')
@@ -201,7 +201,8 @@ algorithm = AdvSMM(
     device=the_device,
     replay_buffer_size=10**6,
     policy_optim_batch_size=args.batch_size,
-    num_edges=args.edge_types)
+    num_edges=args.edge_types,
+    disc_optim_batch_size=args.batch_size)
 
 
 def train(epoch, best_val_loss):
