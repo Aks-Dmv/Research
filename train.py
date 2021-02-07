@@ -22,7 +22,7 @@ parser.add_argument('--no-cuda', action='store_true', default=False,
 parser.add_argument('--seed', type=int, default=42, help='Random seed.')
 parser.add_argument('--epochs', type=int, default=500,
                     help='Number of epochs to train.')
-parser.add_argument('--batch-size', type=int, default=128,
+parser.add_argument('--batch-size', type=int, default=1024,
                     help='Number of samples per batch.')
 parser.add_argument('--lr', type=float, default=0.0005,
                     help='Initial learning rate.')
