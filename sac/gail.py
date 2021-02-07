@@ -44,7 +44,7 @@ class AdvSMM:
         num_initial_disc_iters=100,
 
         disc_optim_batch_size=128,
-        disc_lr=0.0001,
+        disc_lr=0.00005,
         disc_momentum=0.0,
         disc_optimizer_class=optim.Adam,
         use_grad_pen=True,
