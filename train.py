@@ -200,9 +200,9 @@ algorithm = AdvSMM(
     target_state_buffer=None,
     device=the_device,
     replay_buffer_size=5000,
-    policy_optim_batch_size=args.batch_size,
+    policy_optim_batch_size=10*args.batch_size,
     num_edges=args.edge_types,
-    disc_optim_batch_size=args.batch_size)
+    disc_optim_batch_size=10*args.batch_size)
 
 
 def train(epoch, best_val_loss):
