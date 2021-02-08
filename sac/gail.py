@@ -149,7 +149,7 @@ class AdvSMM:
                 self._do_reward_training(rel_rec, rel_send, prediction_steps, epoch)
             self.not_done_initial_disc_iters = False
 
-        disc_stat = np.zeros((3,))
+        disc_stat = np.zeros((4,))
         policy_stat = np.zeros((7,))
         for _ in range(self.num_disc_updates_per_loop_iter):
             disc_stat += self._do_reward_training(rel_rec, rel_send, prediction_steps, epoch)
