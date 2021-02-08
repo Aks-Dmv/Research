@@ -188,12 +188,12 @@ if args.cuda:
     rel_send = rel_send.cuda()
     triu_indices = triu_indices.cuda()
     tril_indices = tril_indices.cuda()
-    if torch.cuda.device_count() > 1:
-        print("Let's use", torch.cuda.device_count(), "GPUs!")
-        # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
-        encoder = torch.nn.DataParallel(encoder)
-        decoder.init_multiple_cuda()
-        disc_model = torch.nn.DataParallel(disc_model)
+    #if torch.cuda.device_count() > 1:
+    #    print("Let's use", torch.cuda.device_count(), "GPUs!")
+    #    # dim = 0 [30, xxx] -> [10, ...], [10, ...], [10, ...] on 3 GPUs
+    #    encoder = torch.nn.DataParallel(encoder)
+    #    decoder.init_multiple_cuda()
+    #    disc_model = torch.nn.DataParallel(disc_model)
 
 
 
