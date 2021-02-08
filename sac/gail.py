@@ -207,7 +207,7 @@ class AdvSMM:
         disc_ce_loss = self.bce(disc_logits, self.bce_targets)
         
         exp_logits, _ = self.disc_forward(torch.clone(expert_disc_input), torch.clone(expert_disc_edges), rel_rec, rel_send, prediction_steps)
-        exp_ce_loss = self.bce(exp_logits, torch.ones(self.disc_optim_batch_size, 1).to(self.device))
+        exp_reward = torch.log(1-exp_logits).mean()
 
         if self.use_grad_pen: # gradient penalty
             eps = torch.rand(expert_disc_input.shape).to(self.device)
@@ -236,7 +236,7 @@ class AdvSMM:
         self.disc_optimizer.step()
 
         # return disc stat
-        return np.array([disc_total_loss.item(), disc_ce_loss.item(), disc_total_loss.item() - disc_ce_loss.item(), exp_ce_loss.item()])
+        return np.array([disc_total_loss.item(), disc_ce_loss.item(), disc_total_loss.item() - disc_ce_loss.item(), exp_reward.item()])
 
 
     def _do_policy_training(self, rel_rec, rel_send, prediction_steps, epoch):
