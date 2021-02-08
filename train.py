@@ -247,7 +247,7 @@ def train(epoch, best_val_loss):
 
         # validation output uses teacher forcing
         output = decoder.get_action_batch(data, edges, rel_rec, rel_send, 1)
-        output = torch.as_tensor(output).to(the_device)
+        output = torch.as_tensor(output[:, :, :-1, :]).to(the_device)
 
         target = data[:, :, 1:, :]
         loss_nll = nll_gaussian(output, target, args.var)
