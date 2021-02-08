@@ -207,7 +207,7 @@ class AdvSMM:
         disc_ce_loss = self.bce(disc_logits, self.bce_targets)
 
         if self.use_grad_pen: # gradient penalty
-            eps = torch.rand((self.disc_optim_batch_size, 1)).to(self.device)
+            eps = torch.rand(expert_disc_input.shape).to(self.device)
             
             interp_obs = eps*expert_disc_input + (1-eps)*policy_disc_input # interpolate
             interp_obs = interp_obs.detach()
