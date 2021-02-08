@@ -314,6 +314,15 @@ class SAC:
         self.ac_targ.q1.cuda()
         self.ac_targ.q2.cuda()
         self.ac_targ.pi.cuda()
+        
+    def init_multiple_cuda(self):
+        self.ac.q1 = nn.DataParallel(self.ac.q1)
+        self.ac.q2 = nn.DataParallel(self.ac.q2)
+        self.ac.pi = nn.DataParallel(self.ac.pi)
+        self.ac_targ.q1 = nn.DataParallel(self.ac_targ.q1)
+        self.ac_targ.q2 = nn.DataParallel(self.ac_targ.q2)
+        self.ac_targ.pi = nn.DataParallel(self.ac_targ.pi)
+
 
     def init_eval(self):
         self.ac.q1.eval()
