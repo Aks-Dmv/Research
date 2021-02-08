@@ -513,12 +513,12 @@ class MLPDecoder(nn.Module):
             output = output.cuda()
 
         # Re-assemble correct timeline
-        output_len = 0
+        #output_len = 0
         for i in range(len(preds)):
             output[:, i::pred_steps, :, :] = preds[i]
-            output_len +=pred_steps
+            #output_len +=pred_steps
 
-        pred_all = output[:, :output_len,:,:]#(inputs.size(1) - 1), :, :]
+        pred_all = output#[:, :output_len,:,:]#(inputs.size(1) - 1), :, :]
 
         return pred_all.transpose(1, 2).contiguous()
 
