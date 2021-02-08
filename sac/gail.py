@@ -236,7 +236,7 @@ class AdvSMM:
         self.disc_optimizer.step()
 
         # return disc stat
-        return np.array([disc_total_loss.item(), disc_ce_loss.item(), disc_total_loss.item() - disc_ce_loss.item(), exp_reward.item()])
+        return np.array([disc_total_loss.item(), disc_ce_loss.item(), disc_total_loss.item() - disc_ce_loss.item(), exp_reward])
 
 
     def _do_policy_training(self, rel_rec, rel_send, prediction_steps, epoch):
