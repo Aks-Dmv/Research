@@ -195,19 +195,17 @@ class AdvSMM:
         expert_disc_input, expert_disc_edges = self.get_target_batch_and_edges(self.disc_optim_batch_size)
         expert_disc_input = expert_disc_input.reshape((-1, 1, self.num_atoms, 2*self.inp_dims)) # access to expert samples
 
-        edges = torch.cat([expert_disc_edges, orig_edges], dim=0)
-        
-
         policy_disc_input = policy_disc_input.transpose(1, 2)
         expert_disc_input = expert_disc_input.transpose(1, 2)
-
-        disc_input = torch.cat([expert_disc_input, policy_disc_input], dim=0) # (2*B, 2*S)
-
-        disc_logits, _ = self.disc_forward(disc_input, edges, rel_rec, rel_send, prediction_steps)
-        disc_ce_loss = self.bce(disc_logits, self.bce_targets)
         
         exp_logits, _ = self.disc_forward(torch.clone(expert_disc_input), torch.clone(expert_disc_edges), rel_rec, rel_send, prediction_steps)
-        exp_reward = torch.log(1-exp_logits).mean()
+        exp_reward = torch.log(1-torch.sigmoid(exp_logits)).mean()
+
+        disc_input = torch.cat([expert_disc_input, policy_disc_input], dim=0) # (2*B, 2*S)
+        
+        edges = torch.cat([expert_disc_edges, orig_edges], dim=0)
+        disc_logits, _ = self.disc_forward(disc_input, edges, rel_rec, rel_send, prediction_steps)
+        disc_ce_loss = self.bce(disc_logits, self.bce_targets)
 
         if self.use_grad_pen: # gradient penalty
             eps = torch.rand(expert_disc_input.shape).to(self.device)
