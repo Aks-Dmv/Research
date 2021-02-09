@@ -10,8 +10,8 @@ from torch.distributions.normal import Normal
 
 from sac.modules import MLPDecoder
 
-LOG_STD_MAX = 2
-LOG_STD_MIN = -20
+LOG_STD_MAX = 1
+LOG_STD_MIN = -1
 
 def gnn(sizes):
     decoder = MLPDecoder(n_in_node=sizes[0],
