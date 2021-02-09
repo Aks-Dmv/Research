@@ -41,7 +41,7 @@ class AdvSMM:
         min_steps_before_training=1200, 
         num_disc_updates_per_loop_iter=5,
         num_policy_updates_per_loop_iter=2,
-        num_initial_disc_iters=100,
+        num_initial_disc_iters=400,
 
         disc_optim_batch_size=128,
         disc_lr=0.00005,
