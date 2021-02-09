@@ -198,8 +198,9 @@ class AdvSMM:
         policy_disc_input = policy_disc_input.transpose(1, 2)
         expert_disc_input = expert_disc_input.transpose(1, 2)
         
-        exp_logits, _ = self.disc_forward(torch.clone(expert_disc_input), torch.clone(expert_disc_edges), rel_rec, rel_send, prediction_steps)
-        exp_reward = torch.log(1-torch.sigmoid(exp_logits)).mean().cpu().detach().numpy()
+        exp_clone = torch.clone(expert_disc_input)
+        exp_reward = self.get_reward(exp_clone[:,:,:,:self.inp_dims], exp_clone[:,:,:,self.inp_dims:], torch.clone(expert_disc_edges), rel_rec, rel_send, prediction_steps)
+        exp_reward = exp_reward.mean().item()
 
         disc_input = torch.cat([expert_disc_input, policy_disc_input], dim=0) # (2*B, 2*S)
         
